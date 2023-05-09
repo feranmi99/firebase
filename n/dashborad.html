@@ -76,7 +76,7 @@
         })  
         let chatRef = ref(database, "chats")
         onValue(chatRef, (snapshot)=>{
-            // show.innerHTML = ""
+            show.innerHTML = ""
             let data = snapshot.val()
             console.log(data)
             todoIndex = data.length
