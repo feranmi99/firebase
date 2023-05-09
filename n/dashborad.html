@@ -12,6 +12,7 @@
 
     <input type="text" placeholder="enter chat" id="msgInput">
     <button id="sendChat">Send</button>
+    <div id="show"></div>
 
 
     <script type="module">
@@ -79,16 +80,20 @@
             let data = snapshot.val()
             console.log(data)
             todoIndex = data.length
-            // data.map((item,index)=>{
-            //     show.innerHTML += `
-            //     <div>
-            //         <p>${index+1}</p>
-            //         <p>${item.username}</p>
-            //         <p>${item.message}</p>
-            //         <p>${item.time}</p>
-            //     </div>
-            //     `
-            // })
+            // for (let index = 0; index < data.length; index++) {
+            //     go.innerHTML = data.username
+                
+            // }
+            data.map((item,index)=>{
+                show.innerHTML += `
+                <div>
+                    <p>${index+1}</p>
+                    <p>${item.username}</p>
+                    <p>${item.message}</p>
+                    <p>${item.time}</p>
+                </div>
+                `
+            })
         })
     </script>
 </body>
