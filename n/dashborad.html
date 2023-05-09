@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    dashboard
+    <button id="signOutBtn">Sign out</button>
+
+    <input type="text" placeholder="enter chat" id="msgInput">
+    <button id="sendChat">Send</button>
+
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAjIsgNfWcLcmQpsXd3t4uNBqgAjT9P5kY",
+            authDomain: "fir-fff36.firebaseapp.com",
+            projectId: "fir-fff36",
+            storageBucket: "fir-fff36.appspot.com",
+            messagingSenderId: "512888930724",
+            appId: "1:512888930724:web:f4b453d20db29dee558131",
+            databaseURL: "https://fir-fff36-default-rtdb.firebaseio.com"
+        };
+   
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const database = getDatabase(app);
+        let todoIndex = 0
+
+       
+        onAuthStateChanged(auth, (user)=>{
+            if(user){
+                console.log(user);
+            }else{
+                window.location.href = "index.html"
+            }
+        })
+
+        signOutBtn.addEventListener("click", ()=>{
+            signOut(auth)
+            .then(()=>{
+                console.log("Sign out");
+                window.location.href = "index.html"
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+        })
+
+       
+        sendChat.addEventListener("click", ()=>{
+            let date = new Date()
+            let theUser = auth.currentUser.displayName
+            let chatObj = {
+                message: msgInput.value,
+                time: date.toLocaleTimeString(),
+                username: theUser
+            }
+            console.log(chatObj);
+            // message = ""
+
+            let chatRef = ref(database, `chats/${todoIndex}`)
+            set(chatRef, chatObj)
+
+          
+        })  
+        let chatRef = ref(database, "chats")
+        onValue(chatRef, (snapshot)=>{
+            // show.innerHTML = ""
+            let data = snapshot.val()
+            console.log(data)
+            todoIndex = data.length
+            // data.map((item,index)=>{
+            //     show.innerHTML += `
+            //     <div>
+            //         <p>${index+1}</p>
+            //         <p>${item.username}</p>
+            //         <p>${item.message}</p>
+            //         <p>${item.time}</p>
+            //     </div>
+            //     `
+            // })
+        })
+    </script>
+</body>
+</html>
